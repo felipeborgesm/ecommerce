@@ -2,13 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <app-header></app-header>
-
-    <router-outlet></router-outlet>
-  `,
-  // templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
   title = 'ecommerce';
