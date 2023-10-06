@@ -22,7 +22,52 @@ export class CartService {
     }
 
     this.cart.next({ items })
-    this._snackBar.open('1 item add to cart.', 'ok', {duration: 3000})
-    console.log(this.cart.value)
+    this._snackBar.open('1 item add to cart.', 'ok', { duration: 3000 })
+  }
+
+  getTotal(items: Array<CartItem>): number {
+    return items
+      .map((item) => item.price * item.quantity)
+      .reduce((prev, current) => prev + current, 0);
+  }
+
+  clearCart(): void {
+    this.cart.next({ items: [] })
+    this._snackBar.open('Cart is cleared.', 'ok', { duration: 3000 })
+  }
+
+  removeFromCart(item: CartItem, update = true): Array<CartItem> {
+    const filteredItems = this.cart.value.items.filter(
+      (_item) => _item.id !== item.id)
+
+    if (update) {
+
+      this.cart.next({ items: filteredItems })
+      this._snackBar.open('1 item removed from cart.', 'ok', { duration: 3000 })
+    }
+
+    return filteredItems
+  }
+
+  subFromCart(item: CartItem): void {
+    let itemForRemoval: CartItem | undefined
+    let filteredItems = this.cart.value.items
+      .map((_item) => {
+        if (_item.id === item.id) {
+          _item.quantity--
+
+          if (_item.quantity === 0) {
+            itemForRemoval = _item
+          }
+        }
+        return item
+      })
+
+    if (itemForRemoval) {
+      filteredItems = this.removeFromCart(itemForRemoval, false)
+    }
+
+    this.cart.next({ items: filteredItems })
+    this._snackBar.open('1 item removed from cart.', 'ok', { duration: 3000 })
   }
 }
