@@ -10,7 +10,7 @@ import { StoreService } from 'src/app/services/store.service';
 export class FiltersComponent implements OnInit, OnDestroy {
   @Output() showCategory = new EventEmitter<string>();
 
-  categories: Array<string> | undefined
+  categories: string[] | undefined
 
   categoriesSubscription: Subscription | undefined
 
@@ -18,14 +18,15 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.storeService.getAllCategories()
-      .subscribe((response) => {
-        this.categories = response
-      })
+    this.categoriesSubscription =
+      this.storeService.getAllCategories()
+        .subscribe((response) => {
+          this.categories = response
+        })
   }
 
   onShowCategory(category: string): void {
-    this.showCategory.emit(category)
+    this.showCategory.next(category)
   }
 
   ngOnDestroy(): void {
